@@ -1,3 +1,8 @@
 {
-  "title": "Welcome to ING Hub Case Study"
+  "mainLayout": {
+    "header": {
+      "employees": "Employees",
+      "addNew": "Add New"
+    }
+  }
 }

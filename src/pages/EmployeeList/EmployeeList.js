@@ -1,9 +1,10 @@
-import i18next from 'i18next';
+import { translate } from '@/lib';
 import { LitElement, html } from 'lit';
 
 export class EmployeeList extends LitElement {
   constructor() {
     super();
+    console.log('EmployeeList component initialized', translate('title'));
   }
 
   connectedCallback() {
@@ -11,7 +12,7 @@ export class EmployeeList extends LitElement {
   }
 
   render() {
-    return html`<div>${i18next.t('title')}</div>`;
+    return html`<div>${translate('title')}</div>`;
   }
 }
 
