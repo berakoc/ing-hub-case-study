@@ -16,6 +16,9 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "i18next": "^25.6.0",
+    "i18next-browser-languagedetector": "^8.2.0",
+    "i18next-http-backend": "^3.0.2",
     "lit": "^3.3.1",
     "zustand": "^5.0.8"
   },
