@@ -1,5 +1,20 @@
-import { createStore } from "zustand/vanilla";
+import { createStore } from 'zustand/vanilla';
+
+const initialState = {
+  count: 0,
+};
 
 export const store = createStore(() => ({
-  count: 4,
+  ...initialState,
+  actions: {
+    incrementCount: () => {
+      store.setState((state) => ({ count: state.count + 1 }));
+    },
+    resetCount: () => {
+      store.setState({ count: 0 });
+    },
+    resetStore: () => {
+      store.setState({ ...initialState });
+    },
+  },
 }));
