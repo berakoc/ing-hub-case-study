@@ -7,19 +7,22 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --color-ing-orange: #ff6101;
+  --color-ing-orange-light: #febda3;
+  --color-ing-orange-hover: #e65500;
+  --color-ing-orange-active: #b33e00;
+  --color-ing-dark-blue-hover: #3b3c7e;
+  --color-ing-dark-blue-active: #2e2f6b;
+  --color-ing-dark-blue: #525198;
+  --color-white: #ffffff;
+  --color-background: #f8f8f8;
+  --color-gray: #a8a8a8;
+  --color-text-primary: #000000;
+  --color-text-secondary: #b3adad;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
 }

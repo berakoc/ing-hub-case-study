@@ -6,11 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ing-hub-case-study</title>
     <link rel="stylesheet" href="./src/index.css" />
-    <script type="module" src="/src/my-element.js"></script>
+    <script type="module" src="/src/components/index.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"
+    />
   </head>
   <body>
-    <my-element>
-      <h1>Vite + Lit</h1>
-    </my-element>
+    <ing-button variant="secondary">
+      <i class="ph-fill ph-trash-simple"></i>
+      <span>Delete</span>
+    </ing-button>
   </body>
 </html>
