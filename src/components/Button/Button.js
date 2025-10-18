@@ -8,7 +8,6 @@ export class Button extends LitElement {
   }
 
   constructor() {
-    console.log('Button component initialized');
     super();
     this.variant = 'primary';
     this.onClick = () => {};
