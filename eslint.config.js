@@ -36,6 +36,7 @@ export default defineConfig([
 
     rules: {
       'prettier/prettier': 'error',
+      'no-console': 'error',
     },
   },
 ]);

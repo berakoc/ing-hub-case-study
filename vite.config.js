@@ -14,7 +14,11 @@ export default defineConfig({
     setupFiles: './vitest.setup.js',
     coverage: {
       provider: 'istanbul',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'html', 'json'],
+      statements: 90,
+      branches: 90,
+      functions: 90,
+      lines: 90,
     },
   },
 });
