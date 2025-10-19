@@ -4,5 +4,35 @@
       "employees": "Çalışanlar",
       "addNew": "Yeni Çalışan Ekle"
     }
+  },
+  "employeeList": {
+    "title": "Çalışan Listesi",
+    "deleteEmployeeModal": {
+      "title": "Emin misiniz?",
+      "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı silinecektir",
+      "proceed": "Devam Et",
+      "cancel": "İptal"
+    },
+    "tableHeader": {
+      "firstName": "Ad",
+      "lastName": "Soyad",
+      "dateOfEmployment": "İşe Başlama Tarihi",
+      "dateOfBirth": "Doğum Tarihi",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "department": "Departman",
+      "position": "Pozisyon",
+      "Actions": "Aksiyonlar"
+    }
+  },
+  "buttonAction": {
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "save": "Kaydet",
+    "cancel": "İptal"
+  },
+  "notFound": {
+    "pageDoesNotExist": "Hata! Aradığınız sayfa mevcut değil.",
+    "returnToHomepage": "Çalışan Listesine Dön"
   }
 }

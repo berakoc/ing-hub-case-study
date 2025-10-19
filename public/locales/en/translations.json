@@ -4,5 +4,35 @@
       "employees": "Employees",
       "addNew": "Add New"
     }
+  },
+  "employeeList": {
+    "title": "Employee List",
+    "deleteEmployeeModal": {
+      "title": "Are you sure?",
+      "subtitle": "Selected Employee record of {{employeeFullname}} times will be deleted",
+      "proceed": "Proceed",
+      "cancel": "Cancel"
+    },
+    "tableHeader": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "dateOfEmployment": "Date of Employment",
+      "dateOfBirth": "Date of Birth",
+      "phone": "Phone",
+      "email": "Email",
+      "department": "Department",
+      "position": "Position",
+      "actions": "Actions"
+    }
+  },
+  "buttonAction": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "notFound": {
+    "pageDoesNotExist": "Oops! The page you're looking for doesn't exist.",
+    "returnToHomepage": "Return to Employee List"
   }
 }

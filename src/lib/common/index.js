@@ -6,3 +6,6 @@ export const LanguageFlagMap = {
   en: '/uk-flag.svg',
   tr: '/turkey-flag.svg',
 };
+
+export const TABLE_ITEMS_PER_PAGE = 10;
+export const CARD_LIST_ITEMS_PER_PAGE = 4;
