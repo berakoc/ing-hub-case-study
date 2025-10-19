@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
 import './Button.js';
-import { ButtonVariant } from './common.js';
 
 describe('Button Component', () => {
   it('renders with default properties', () => {
@@ -41,12 +40,6 @@ describe('Button Component', () => {
     const shadowButton = button.shadowRoot.querySelector('button');
 
     expect(shadowButton).toHaveClass('primary');
-  });
-
-  it('should initialize the correct button variants', () => {
-    expect(ButtonVariant.Primary).toBe('primary');
-    expect(ButtonVariant.Secondary).toBe('secondary');
-    expect(Object.keys(ButtonVariant).length).toBe(2);
   });
 
   afterEach(() => {

@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import { ButtonVariant } from './common';
 
 export class Button extends LitElement {
   static get properties() {
@@ -9,7 +10,7 @@ export class Button extends LitElement {
 
   constructor() {
     super();
-    this.variant = 'primary';
+    this.variant = ButtonVariant.Primary;
     this.onClick = () => {};
   }
 
@@ -26,8 +27,10 @@ export class Button extends LitElement {
   static get styles() {
     return css`
       button {
+        width: 100%;
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
         font-size: 16px;
         font-weight: 600;
@@ -37,6 +40,7 @@ export class Button extends LitElement {
         cursor: pointer;
         transition: all 0.2s ease-in-out;
       }
+
       .primary {
         background-color: var(--color-ing-orange);
         color: var(--color-white);
@@ -48,6 +52,7 @@ export class Button extends LitElement {
         background-color: var(--color-ing-orange-active);
         transform: scale(0.95);
       }
+
       .secondary {
         background-color: var(--color-ing-dark-blue);
         color: var(--color-white);
@@ -57,6 +62,18 @@ export class Button extends LitElement {
       }
       .secondary:active {
         background-color: var(--color-ing-dark-blue-active);
+        transform: scale(0.95);
+      }
+
+      .tertiary {
+        background-color: var(--color-white);
+        color: var(--color-ing-dark-blue);
+        border: 2px solid var(--color-ing-dark-blue);
+      }
+      .tertiary:hover {
+        color: var(--color-ing-dark-blue);
+      }
+      .tertiary:active {
         transform: scale(0.95);
       }
     `;
