@@ -1,3 +1,4 @@
+import { translate } from '@/lib';
 import { LitElement, html, css } from 'lit';
 
 export class NotFound extends LitElement {
@@ -58,8 +59,8 @@ export class NotFound extends LitElement {
     return html`
       <div class="container">
         <img class="illustration" src="/404-illustration.svg" alt="Page not found illustration" />
-        <p class="message">Oops! The page you're looking for doesn't exist.</p>
-        <a href="/employee-list" class="home-link"> Return to Employee List </a>
+        <p class="message">${translate('notFound.pageDoesNotExist')}</p>
+        <a href="/employee-list" class="home-link">${translate('notFound.returnToHomepage')}</a>
       </div>
     `;
   }
