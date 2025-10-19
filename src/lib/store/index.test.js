@@ -7,31 +7,78 @@ describe('Store', () => {
    */
   let store;
 
+  const mockEmployee = {
+    id: '1',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john@example.com',
+    position: 'Developer',
+  };
+
+  const mockEmployee2 = {
+    id: '2',
+    firstName: 'Jane',
+    lastName: 'Smith',
+    email: 'jane@example.com',
+    position: 'Designer',
+  };
+
   beforeEach(() => {
     store = actualStore;
-    store.getState().actions.resetStore();
+    store.getState().resetStore({ employees: [] });
   });
 
-  it('should initialize with default values', () => {
+  it('should initialize with empty employees array', () => {
     const state = store.getState();
-    expect(state.count).toBe(0);
+    expect(state.employees).toEqual([]);
   });
 
-  it('should increment click count', () => {
-    const {
-      actions: { incrementCount },
-    } = store.getState();
-    incrementCount();
-    expect(store.getState().count).toBe(1);
+  it('should add an employee', () => {
+    const { addEmployee } = store.getState();
+
+    addEmployee(mockEmployee);
+    const state = store.getState();
+
+    expect(state.employees).toHaveLength(1);
+    expect(state.employees[0]).toEqual(mockEmployee);
   });
 
-  it('should reset click count', () => {
-    const {
-      actions: { incrementCount, resetCount },
-    } = store.getState();
-    incrementCount();
-    incrementCount();
-    resetCount();
-    expect(store.getState().count).toBe(0);
+  it('should delete an employee', () => {
+    const { addEmployee, deleteEmployee } = store.getState();
+
+    addEmployee(mockEmployee);
+    addEmployee(mockEmployee2);
+
+    deleteEmployee(mockEmployee.id);
+    const state = store.getState();
+
+    expect(state.employees).toHaveLength(1);
+    expect(state.employees[0]).toEqual(mockEmployee2);
+  });
+
+  it('should update an employee', () => {
+    const { addEmployee, updateEmployee } = store.getState();
+
+    addEmployee(mockEmployee);
+
+    const updatedEmployee = { ...mockEmployee, firstName: 'Johnny' };
+    updateEmployee(mockEmployee.id, updatedEmployee);
+
+    const state = store.getState();
+    const updatedEmployeeInStore = state.employees.find((emp) => emp.id === mockEmployee.id);
+    expect(updatedEmployeeInStore.firstName).toBe('Johnny');
+    expect(state.employees).toHaveLength(1);
+  });
+
+  it('should reset store to initial state', () => {
+    const { addEmployee, resetStore } = store.getState();
+
+    addEmployee(mockEmployee);
+    addEmployee(mockEmployee2);
+
+    resetStore({ employees: [] });
+    const state = store.getState();
+
+    expect(state.employees).toEqual([]);
   });
 });
