@@ -5,11 +5,12 @@ import {
   TABLE_ITEMS_PER_PAGE,
   translate,
 } from '@/lib';
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import '@phosphor-icons/webcomponents/PhList';
 import '@phosphor-icons/webcomponents/PhSquaresFour';
 import { computeTotalPages, ViewMode } from './common';
 import { choose } from 'lit/directives/choose.js';
+import { when } from 'lit/directives/when.js';
 import './components';
 
 export class EmployeeList extends LitElement {
@@ -110,12 +111,17 @@ export class EmployeeList extends LitElement {
           ></ing-pagination>
         </div>
       </div>
-      <delete-employee-modal
-        ?isOpen=${this.isDeleteEmployeeModalOpen}
-        @close-modal=${this._closeDeleteEmployeeModal}
-        @delete-employee=${this._deleteEmployee}
-        .employeeFullname=${employeeFullname}
-      ></delete-employee-modal>
+      ${when(
+        this.isDeleteEmployeeModalOpen,
+        () =>
+          html`<delete-employee-modal
+            ?isOpen=${this.isDeleteEmployeeModalOpen}
+            @close-modal=${this._closeDeleteEmployeeModal}
+            @delete-employee=${this._deleteEmployee}
+            .employeeFullname=${employeeFullname}
+          ></delete-employee-modal>`,
+        () => nothing
+      )}
     </div>`;
   }
 
@@ -129,8 +135,8 @@ export class EmployeeList extends LitElement {
       .container {
         display: flex;
         flex-direction: column;
-        gap: 32px;
         position: relative;
+        gap: 32px;
       }
       .header {
         display: flex;
