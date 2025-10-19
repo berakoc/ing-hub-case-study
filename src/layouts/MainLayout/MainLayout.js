@@ -34,7 +34,7 @@ export class MainLayout extends LitElement {
   static get styles() {
     return css`
       .main-container {
-        min-height: 200vh;
+        min-height: 100vh;
         background-color: var(--color-background);
       }
       .main-header {
@@ -45,6 +45,7 @@ export class MainLayout extends LitElement {
         padding: 12px;
         position: sticky;
         top: 0;
+        z-index: 10;
       }
 
       .logo-container {
