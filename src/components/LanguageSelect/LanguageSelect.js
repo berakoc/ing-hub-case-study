@@ -1,5 +1,5 @@
 import { LanguageFlagMap } from '@/lib';
-import i18next from 'i18next';
+import i18n from '@/i18n';
 import { LitElement, html, css } from 'lit';
 
 export class LanguageSelect extends LitElement {
@@ -11,7 +11,7 @@ export class LanguageSelect extends LitElement {
 
   constructor() {
     super();
-    this.value = i18next.language || 'en';
+    this.value = i18n.language || 'en';
     this.isOpen = false;
     this.mode = 'default';
   }
@@ -20,7 +20,7 @@ export class LanguageSelect extends LitElement {
     e.stopPropagation();
     this.value = lang;
     this.isOpen = false;
-    i18next.changeLanguage(lang);
+    i18n.changeLanguage(lang);
   }
 
   _toggleDropdown(e) {
