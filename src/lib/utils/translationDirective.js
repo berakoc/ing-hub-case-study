@@ -1,19 +1,29 @@
-// src/directives/translate.js
 import { directive, AsyncDirective } from 'lit/async-directive.js';
 import { nothing } from 'lit';
 import i18next from '@/i18n';
 
-class TranslateDirective extends AsyncDirective {
-  render(key) {
-    return i18next.t(key) || nothing;
+export class TranslateDirective extends AsyncDirective {
+  render(key, options) {
+    return i18next.t(key, options) || nothing;
   }
 
-  update(_part, [key]) {
+  update(_part, [key, options]) {
     if (!this._listener) {
-      this._listener = () => this.setValue(i18next.t(key));
+      this._listener = () => this._updateValue(key, options);
       i18next.on('languageChanged', this._listener);
     }
-    return this.render(key);
+
+    if (this._key !== key || this._options !== options) {
+      this._key = key;
+      this._options = options;
+      this._updateValue(key, options);
+    }
+
+    return this.render(key, options);
+  }
+
+  _updateValue(key, options) {
+    this.setValue(i18next.t(key, options));
   }
 
   disconnected() {
