@@ -1,5 +1,10 @@
 import { ButtonVariant } from '@/components';
-import { CARD_LIST_ITEMS_PER_PAGE, formatDateToDefault, translate } from '@/lib';
+import {
+  CARD_LIST_ITEMS_PER_PAGE,
+  formatDateToDefault,
+  getEmployeePosition,
+  translate,
+} from '@/lib';
 import { LitElement, html, css } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import '@phosphor-icons/webcomponents/PhPencilSimpleLine';
@@ -42,43 +47,31 @@ export class CardList extends LitElement {
           (employee) =>
             html`<div class="card">
               <div class="card-row">
-                ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.firstName'),
-                  employee.firstName
-                )}
-                ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.lastName'),
-                  employee.lastName
-                )}
+                ${this.renderEmployeeInfoItem(translate('employee.firstName'), employee.firstName)}
+                ${this.renderEmployeeInfoItem(translate('employee.lastName'), employee.lastName)}
               </div>
               <div class="card-row">
                 ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.dateOfEmployment'),
+                  translate('employee.dateOfEmployment'),
                   formatDateToDefault(employee.dateOfEmployment)
                 )}
                 ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.dateOfBirth'),
+                  translate('employee.dateOfBirth'),
                   formatDateToDefault(employee.dateOfBirth)
                 )}
               </div>
               <div class="card-row">
-                ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.phone'),
-                  employee.phone
-                )}
-                ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.email'),
-                  employee.email
-                )}
+                ${this.renderEmployeeInfoItem(translate('employee.phone'), employee.phone)}
+                ${this.renderEmployeeInfoItem(translate('employee.email'), employee.email)}
               </div>
               <div class="card-row">
                 ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.department'),
+                  translate('employee.department'),
                   employee.department
                 )}
                 ${this.renderEmployeeInfoItem(
-                  translate('employeeList.tableHeader.position'),
-                  employee.position
+                  translate('employee.position'),
+                  getEmployeePosition({ employee, translate })
                 )}
               </div>
               <div class="action-buttons">

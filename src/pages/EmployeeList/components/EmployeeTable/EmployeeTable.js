@@ -1,4 +1,4 @@
-import { formatDateToDefault, TABLE_ITEMS_PER_PAGE, translate } from '@/lib';
+import { formatDateToDefault, getEmployeePosition, TABLE_ITEMS_PER_PAGE, translate } from '@/lib';
 import { LitElement, html, css } from 'lit';
 import '@phosphor-icons/webcomponents/PhPencilSimpleLine';
 import '@phosphor-icons/webcomponents/PhTrashSimple';
@@ -26,15 +26,15 @@ export class EmployeeTable extends LitElement {
       <table>
         <thead>
           <tr>
-            <th>${translate('employeeList.tableHeader.firstName')}</th>
-            <th>${translate('employeeList.tableHeader.lastName')}</th>
-            <th>${translate('employeeList.tableHeader.dateOfEmployment')}</th>
-            <th>${translate('employeeList.tableHeader.dateOfBirth')}</th>
-            <th>${translate('employeeList.tableHeader.phone')}</th>
-            <th>${translate('employeeList.tableHeader.email')}</th>
-            <th>${translate('employeeList.tableHeader.department')}</th>
-            <th>${translate('employeeList.tableHeader.position')}</th>
-            <th>${translate('employeeList.tableHeader.actions')}</th>
+            <th>${translate('employee.firstName')}</th>
+            <th>${translate('employee.lastName')}</th>
+            <th>${translate('employee.dateOfEmployment')}</th>
+            <th>${translate('employee.dateOfBirth')}</th>
+            <th>${translate('employee.phone')}</th>
+            <th>${translate('employee.email')}</th>
+            <th>${translate('employee.department')}</th>
+            <th>${translate('employee.position')}</th>
+            <th>${translate('employee.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -53,7 +53,7 @@ export class EmployeeTable extends LitElement {
                   <td>${employee.phone}</td>
                   <td>${employee.email}</td>
                   <td>${employee.department}</td>
-                  <td>${employee.position}</td>
+                  <td>${getEmployeePosition({ employee, translate })}</td>
                   <td>
                     <div class="action-buttons">
                       <button class="edit-button">

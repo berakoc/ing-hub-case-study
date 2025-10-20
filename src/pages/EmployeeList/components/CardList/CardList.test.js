@@ -74,10 +74,10 @@ describe('CardList component', () => {
 
   it('displays employee information correctly', () => {
     const firstCard = cardList.shadowRoot.querySelector('.card');
-    expect(firstCard.textContent).toContain('employeeList.tableHeader.firstName');
-    expect(firstCard.textContent).toContain('employeeList.tableHeader.lastName');
-    expect(firstCard.textContent).toContain('formatted-2020-01-01'); // dateOfEmployment
-    expect(firstCard.textContent).toContain('formatted-1990-01-01'); // dateOfBirth
+    expect(firstCard.textContent).toContain('employee.firstName');
+    expect(firstCard.textContent).toContain('employee.lastName');
+    expect(firstCard.textContent).toContain('formatted-2020-01-01');
+    expect(firstCard.textContent).toContain('formatted-1990-01-01');
   });
 
   it('dispatches "open-delete-employee-modal" with the correct employee', async () => {

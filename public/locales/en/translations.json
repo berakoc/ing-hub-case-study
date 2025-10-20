@@ -12,17 +12,6 @@
       "subtitle": "Selected Employee record of {{employeeFullname}} times will be deleted",
       "proceed": "Proceed",
       "cancel": "Cancel"
-    },
-    "tableHeader": {
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "dateOfEmployment": "Date of Employment",
-      "dateOfBirth": "Date of Birth",
-      "phone": "Phone",
-      "email": "Email",
-      "department": "Department",
-      "position": "Position",
-      "actions": "Actions"
     }
   },
   "buttonAction": {
@@ -34,5 +23,43 @@
   "notFound": {
     "pageDoesNotExist": "Oops! The page you're looking for doesn't exist.",
     "returnToHomepage": "Return to Employee List"
+  },
+  "employee": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "dateOfEmployment": "Date of Employment",
+    "dateOfBirth": "Date of Birth",
+    "phone": "Phone",
+    "email": "Email",
+    "department": "Department",
+    "position": "Position",
+    "actions": "Actions",
+    "errors": {
+      "firstNameMinError": "First name must be at least 2 characters long.",
+      "lastNameMinError": "Last name must be at least 2 characters long.",
+      "emptyDateOfEmployment": "Date of employment cannot be empty.",
+      "dateOfBirth": "Date of birth cannot be empty.",
+      "phone": "Please enter a valid phone number.",
+      "email": "Please enter a valid email address.",
+      "departmentMinError": "Department name must be at least 2 characters long.",
+      "positionNotSelectedError": "Please select a position."
+    }
+  },
+  "pleaseSelect": "Please Select",
+  "addEmployee": {
+    "title": "Add Employee"
+  },
+  "position": {
+    "executive": "Executive",
+    "manager": "Manager",
+    "team_lead": "Team Lead",
+    "senior_developer": "Senior Developer",
+    "developer": "Developer",
+    "intern": "Intern",
+    "hr_specialist": "HR Specialist",
+    "marketing_specialist": "Marketing Specialist",
+    "sales_representative": "Sales Representative",
+    "finance_analyst": "Finance Analyst",
+    "customer_support": "Customer Support"
   }
 }

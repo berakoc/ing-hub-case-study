@@ -12,6 +12,15 @@ export class MainLayout extends LitElement {
             <img src="/ing-logo.png" alt="ING Logo" class="logo" />
             <h1 class="company-name">ING</h1>
           </div>
+          <div class="mobile-header-actions">
+            <a href="/employee-list" class="employee-list-action">
+              <span>${translate('mainLayout.header.employees')}</span>
+            </a>
+            <a href="/add-employee" class="add-new-action">
+              <span>${translate('mainLayout.header.addNew')}</span>
+            </a>
+            <language-select></language-select>
+          </div>
           <div class="header-actions">
             <a href="/employee-list" class="employee-list-action">
               <ph-user-list></ph-user-list>
@@ -70,6 +79,10 @@ export class MainLayout extends LitElement {
         gap: 24px;
       }
 
+      .mobile-header-actions {
+        display: none;
+      }
+
       .employee-list-action,
       .add-new-action {
         display: flex;
@@ -80,10 +93,24 @@ export class MainLayout extends LitElement {
         cursor: pointer;
         user-select: none;
         text-decoration: none;
+        border: none;
+        background-color: var(--color-white);
       }
 
       .main-content {
         padding: 32px;
+      }
+
+      @media (max-width: 639px) {
+        .header-actions {
+          display: none;
+        }
+
+        .mobile-header-actions {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+        }
       }
     `;
   }

@@ -17,12 +17,14 @@
   },
   "dependencies": {
     "@phosphor-icons/webcomponents": "^2.1.5",
+    "@tanstack/lit-form": "^1.23.7",
     "@vaadin/router": "^2.0.0",
     "i18next": "^25.6.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
     "lit": "^3.3.1",
     "nanoid": "^5.1.6",
+    "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

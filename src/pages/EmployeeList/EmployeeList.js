@@ -156,6 +156,7 @@ export class EmployeeList extends LitElement {
         font-size: 24px;
         color: var(--color-ing-orange);
         margin: 0;
+        font-weight: 500;
       }
 
       .view-options {

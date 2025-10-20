@@ -1,5 +1,24 @@
 import { nanoid } from 'nanoid';
 
+export const employeePositions = [
+  { value: 'executive', labelKey: 'position.executive' },
+  { value: 'manager', labelKey: 'position.manager' },
+  { value: 'team_lead', labelKey: 'position.team_lead' },
+  { value: 'senior_developer', labelKey: 'position.senior_developer' },
+  { value: 'developer', labelKey: 'position.developer' },
+  { value: 'intern', labelKey: 'position.intern' },
+  { value: 'hr_specialist', labelKey: 'position.hr_specialist' },
+  { value: 'marketing_specialist', labelKey: 'position.marketing_specialist' },
+  { value: 'sales_representative', labelKey: 'position.sales_representative' },
+  { value: 'finance_analyst', labelKey: 'position.finance_analyst' },
+  { value: 'customer_support', labelKey: 'position.customer_support' },
+];
+
+const getRandomEmployeePosition = () => {
+  const randomEmployeePositionIndex = Math.floor(Math.random() * employeePositions.length);
+  return employeePositions[randomEmployeePositionIndex].value;
+};
+
 export const employees = [
   {
     firstName: 'Alice',
@@ -384,4 +403,5 @@ export const employees = [
 ].map((employee) => ({
   ...employee,
   id: nanoid(),
+  position: getRandomEmployeePosition(),
 }));

@@ -12,17 +12,6 @@
       "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı silinecektir",
       "proceed": "Devam Et",
       "cancel": "İptal"
-    },
-    "tableHeader": {
-      "firstName": "Ad",
-      "lastName": "Soyad",
-      "dateOfEmployment": "İşe Başlama Tarihi",
-      "dateOfBirth": "Doğum Tarihi",
-      "phone": "Telefon",
-      "email": "E-posta",
-      "department": "Departman",
-      "position": "Pozisyon",
-      "Actions": "Aksiyonlar"
     }
   },
   "buttonAction": {
@@ -34,5 +23,43 @@
   "notFound": {
     "pageDoesNotExist": "Hata! Aradığınız sayfa mevcut değil.",
     "returnToHomepage": "Çalışan Listesine Dön"
+  },
+  "employee": {
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "dateOfEmployment": "İşe Başlama Tarihi",
+    "dateOfBirth": "Doğum Tarihi",
+    "phone": "Telefon",
+    "email": "E-posta",
+    "department": "Departman",
+    "position": "Pozisyon",
+    "Actions": "Aksiyonlar",
+    "errors": {
+      "firstNameMinError": "Ad en az 2 karakter olmalıdır.",
+      "lastNameMinError": "Soyad en az 2 karakter olmalıdır.",
+      "emptyDateOfEmployment": "İşe başlama tarihi boş bırakılamaz.",
+      "dateOfBirth": "Doğum tarihi boş bırakılamaz.",
+      "phone": "Lütfen geçerli bir telefon numarası girin.",
+      "email": "Lütfen geçerli bir e-posta adresi girin.",
+      "departmentMinError": "Departman adı en az 2 karakter olmalıdır.",
+      "positionNotSelectedError": "Lütfen bir pozisyon seçin."
+    }
+  },
+  "pleaseSelect": "Lütfen Seçiniz",
+  "addEmployee": {
+    "title": "Çalışan Ekle"
+  },
+  "position": {
+    "executive": "Yönetici",
+    "manager": "Müdür",
+    "team_lead": "Takım Lideri",
+    "senior_developer": "Kıdemli Yazılım Geliştirici",
+    "developer": "Yazılım Geliştirici",
+    "intern": "Stajyer",
+    "hr_specialist": "İK Uzmanı",
+    "marketing_specialist": "Pazarlama Uzmanı",
+    "sales_representative": "Satış Temsilcisi",
+    "finance_analyst": "Finans Analisti",
+    "customer_support": "Müşteri Temsilcisi"
   }
 }

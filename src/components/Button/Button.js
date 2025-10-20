@@ -5,6 +5,7 @@ export class Button extends LitElement {
   static get properties() {
     return {
       variant: { type: String },
+      type: { type: String },
     };
   }
 
@@ -12,10 +13,14 @@ export class Button extends LitElement {
     super();
     this.variant = ButtonVariant.Primary;
     this.onClick = () => {};
+    /**
+     * @type {'submit' | 'button' | 'reset'}
+     */
+    this.type = 'submit';
   }
 
   render() {
-    return html`<button @click=${this._handleClick} class=${this.variant}>
+    return html`<button .type=${this.type} @click=${this._handleClick} class=${this.variant}>
       <slot></slot>
     </button>`;
   }
@@ -27,7 +32,7 @@ export class Button extends LitElement {
   static get styles() {
     return css`
       button {
-        width: 100%;
+        width: var(--button-width, 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -44,6 +49,7 @@ export class Button extends LitElement {
       .primary {
         background-color: var(--color-ing-orange);
         color: var(--color-white);
+        border: 2px solid var(--color-ing-orange);
       }
       .primary:hover {
         background-color: var(--color-ing-orange-hover);
@@ -56,6 +62,7 @@ export class Button extends LitElement {
       .secondary {
         background-color: var(--color-ing-dark-blue);
         color: var(--color-white);
+        border: 2px solid var(--color-ing-dark-blue);
       }
       .secondary:hover {
         background-color: var(--color-ing-dark-blue-hover);

@@ -1,6 +1,7 @@
 import '@/components';
 import '@/layouts';
 import '@/pages';
+import { Path } from './lib';
 
 /**
  * @type {import('@vaadin/router').Route[]}
@@ -12,18 +13,18 @@ export const routes = [
     children: [
       {
         path: '',
-        redirect: '/employee-list',
+        redirect: Path.EmployeeList,
       },
       {
-        path: '/employee-list',
+        path: Path.EmployeeList,
         component: 'employee-list',
       },
       {
-        path: '/add-employee',
+        path: Path.AddEmployee,
         component: 'add-employee',
       },
       {
-        path: '/edit-employee/:employeeId',
+        path: Path.EditEmployee,
         component: 'edit-employee',
       },
       {

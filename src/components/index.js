@@ -2,3 +2,7 @@ export * from './Button';
 export * from './LanguageSelect';
 export * from './Pagination';
 export * from './Modal';
+export * from './TextInput';
+export * from './DateInput';
+export * from './PhoneInput';
+export * from './Dropdown';
