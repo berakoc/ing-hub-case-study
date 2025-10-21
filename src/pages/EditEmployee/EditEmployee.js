@@ -44,6 +44,8 @@ export class EditEmployee extends LitElement {
       dateOfBirth: '',
       department: '',
       position: '',
+      phone: '',
+      email: '',
     };
 
     this.#form = new TanStackFormController(this, {

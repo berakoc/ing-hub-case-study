@@ -67,10 +67,12 @@ export class DateInput extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
+        background-color: var(--color-white);
       }
 
       .input-wrapper {
         position: relative;
+        width: 100%;
       }
 
       input {
@@ -83,6 +85,8 @@ export class DateInput extends LitElement {
         padding: 4px 12px;
         outline: none;
         font-family: unset;
+        background-color: white;
+        appearance: none;
       }
 
       input[type='date']::-webkit-calendar-picker-indicator {

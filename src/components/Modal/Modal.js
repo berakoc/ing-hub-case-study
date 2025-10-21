@@ -17,10 +17,8 @@ export class Modal extends LitElement {
       const dialog = this.renderRoot.querySelector('dialog');
       if (this.isOpen && !dialog.open) {
         dialog.showModal?.();
-        document.body.style.overflow = 'hidden';
       } else if (!this.isOpen && dialog.open) {
         dialog.close();
-        document.body.style.overflow = '';
       }
     }
   }

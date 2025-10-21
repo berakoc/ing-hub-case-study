@@ -13,7 +13,8 @@
     "prepare": "husky",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "dev:expose": "vite --host"
   },
   "dependencies": {
     "@phosphor-icons/webcomponents": "^2.1.5",

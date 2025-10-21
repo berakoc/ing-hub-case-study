@@ -38,7 +38,6 @@ describe('Modal component', () => {
     await modal.updateComplete;
 
     expect(fakeDialog.showModal).toHaveBeenCalled();
-    expect(document.body.style.overflow).toBe('hidden');
   });
 
   it('closes the dialog when isOpen is false', async () => {
@@ -49,6 +48,5 @@ describe('Modal component', () => {
     await modal.updateComplete;
 
     expect(fakeDialog.close).toHaveBeenCalled();
-    expect(document.body.style.overflow).toBe('');
   });
 });

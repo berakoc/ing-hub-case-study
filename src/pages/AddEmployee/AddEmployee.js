@@ -31,6 +31,8 @@ export class AddEmployee extends LitElement {
       dateOfBirth: '',
       department: '',
       position: '',
+      phone: '',
+      email: '',
     },
     onSubmit({ value: formValues }) {
       store.getState().addEmployee({ ...formValues, id: nanoid() });

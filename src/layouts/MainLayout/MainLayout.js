@@ -45,6 +45,8 @@ export class MainLayout extends LitElement {
       .main-container {
         min-height: 100vh;
         background-color: var(--color-background);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
       .main-header {
         background-color: var(--color-white);
