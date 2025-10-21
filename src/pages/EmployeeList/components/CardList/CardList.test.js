@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { fireEvent } from '@testing-library/dom';
 import './CardList';
 import * as lib from '@/lib';
+import { Router } from '@vaadin/router';
 
 vi.mock('@/lib', async () => {
   const actual = await vi.importActual('@/lib');
@@ -10,8 +11,13 @@ vi.mock('@/lib', async () => {
     translate: vi.fn((key) => key),
     formatDateToDefault: vi.fn((date) => `formatted-${date}`),
     CARD_LIST_ITEMS_PER_PAGE: 2,
+    Path: { EditEmployee: '/employees/:employeeId/edit' },
   };
 });
+
+vi.mock('@vaadin/router', () => ({
+  Router: { go: vi.fn() },
+}));
 
 describe('CardList component', () => {
   let container;
@@ -92,5 +98,11 @@ describe('CardList component', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     const eventDetail = spy.mock.calls[0][0].detail;
     expect(eventDetail.selectedEmployee).toEqual(employees[0]);
+  });
+
+  it('clicking edit button calls Router.go with the correct employee ID', async () => {
+    const editButton = cardList.shadowRoot.querySelectorAll('ing-button')[0];
+    fireEvent.click(editButton);
+    expect(Router.go).toHaveBeenCalledWith('/employees/1/edit');
   });
 });

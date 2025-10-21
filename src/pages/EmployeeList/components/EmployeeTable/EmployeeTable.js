@@ -1,7 +1,14 @@
-import { formatDateToDefault, getEmployeePosition, TABLE_ITEMS_PER_PAGE, translate } from '@/lib';
+import {
+  formatDateToDefault,
+  getEmployeePosition,
+  Path,
+  TABLE_ITEMS_PER_PAGE,
+  translate,
+} from '@/lib';
 import { LitElement, html, css } from 'lit';
 import '@phosphor-icons/webcomponents/PhPencilSimpleLine';
 import '@phosphor-icons/webcomponents/PhTrashSimple';
+import { Router } from '@vaadin/router';
 
 export class EmployeeTable extends LitElement {
   static get properties() {
@@ -21,11 +28,16 @@ export class EmployeeTable extends LitElement {
     );
   }
 
+  _onEdit(selectedEmployee) {
+    Router.go(Path.EditEmployee.replace(':employeeId', selectedEmployee.id));
+  }
+
   render() {
     return html`<div class="table-container">
       <table>
         <thead>
           <tr>
+            <th><ing-checkbox></ing-checkbox></th>
             <th>${translate('employee.firstName')}</th>
             <th>${translate('employee.lastName')}</th>
             <th>${translate('employee.dateOfEmployment')}</th>
@@ -46,6 +58,7 @@ export class EmployeeTable extends LitElement {
             .map(
               (employee) =>
                 html`<tr>
+                  <td><ing-checkbox></ing-checkbox></td>
                   <td>${employee.firstName}</td>
                   <td>${employee.lastName}</td>
                   <td>${formatDateToDefault(employee.dateOfEmployment)}</td>
@@ -56,7 +69,7 @@ export class EmployeeTable extends LitElement {
                   <td>${getEmployeePosition({ employee, translate })}</td>
                   <td>
                     <div class="action-buttons">
-                      <button class="edit-button">
+                      <button @click=${() => this._onEdit(employee)} class="edit-button">
                         <ph-pencil-simple-line></ph-pencil-simple-line>
                       </button>
                       <button

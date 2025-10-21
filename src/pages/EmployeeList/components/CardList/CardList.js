@@ -3,12 +3,14 @@ import {
   CARD_LIST_ITEMS_PER_PAGE,
   formatDateToDefault,
   getEmployeePosition,
+  Path,
   translate,
 } from '@/lib';
 import { LitElement, html, css } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import '@phosphor-icons/webcomponents/PhPencilSimpleLine';
 import '@phosphor-icons/webcomponents/PhTrashSimple';
+import { Router } from '@vaadin/router';
 
 export class CardList extends LitElement {
   static get properties() {
@@ -33,6 +35,10 @@ export class CardList extends LitElement {
       <span class="info-label">${label}</span>
       <span class="info-value">${value}</span>
     </div>`;
+  }
+
+  _onEdit(selectedEmployee) {
+    Router.go(Path.EditEmployee.replace(':employeeId', selectedEmployee.id));
   }
 
   render() {
@@ -75,7 +81,10 @@ export class CardList extends LitElement {
                 )}
               </div>
               <div class="action-buttons">
-                <ing-button .variant=${ButtonVariant.Primary}>
+                <ing-button
+                  @click=${() => this._onEdit(employee)}
+                  .variant=${ButtonVariant.Primary}
+                >
                   <ph-pencil-simple-line></ph-pencil-simple-line>
                   ${translate('buttonAction.edit')}
                 </ing-button>

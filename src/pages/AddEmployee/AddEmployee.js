@@ -4,13 +4,16 @@ import { LitElement, html, css } from 'lit';
 import z from 'zod';
 import { employeePositions } from '@/lib/store/data';
 import { Router } from '@vaadin/router';
+import { nanoid } from 'nanoid';
+
+const phonePattern = /^\+\(\d{1,3}\) \d{3} \d{3} \d{2} \d{2}$/;
 
 const employeeSchema = z.object({
   firstName: z.string().min(2, { error: 'employee.errors.firstNameMinError' }),
   lastName: z.string().min(2, { error: 'employee.errors.lastNameMinError' }),
   dateOfEmployment: z.string().nonempty({ error: 'employee.errors.emptyDateOfEmployment' }),
   dateOfBirth: z.string().nonempty({ error: 'employee.errors.dateOfBirth' }),
-  phone: z.e164({ error: 'employee.errors.phone' }),
+  phone: z.string().regex(phonePattern, { error: 'employee.errors.phone' }),
   email: z.email({ message: 'employee.errors.email' }),
   department: z.string().min(2, { error: 'employee.errors.departmentMinError' }),
   position: z.string().min(2, { error: 'employee.errors.positionNotSelectedError' }),
@@ -30,7 +33,7 @@ export class AddEmployee extends LitElement {
       position: '',
     },
     onSubmit({ value: formValues }) {
-      store.getState().addEmployee(formValues);
+      store.getState().addEmployee({ ...formValues, id: nanoid() });
       Router.go(Path.EmployeeList);
     },
     validators: {
@@ -107,7 +110,7 @@ export class AddEmployee extends LitElement {
                 .value=${field.state.value}
                 @blur=${() => field.handleBlur()}
                 @input=${(customEvent) => {
-                  if (customEvent.detail.event) {
+                  if (customEvent.detail?.event) {
                     const newValue = customEvent.detail.event.target.value;
                     field.handleChange(newValue);
                   }
@@ -127,7 +130,7 @@ export class AddEmployee extends LitElement {
                 .value=${field.state.value}
                 @blur=${() => field.handleBlur()}
                 @input=${(customEvent) => {
-                  if (customEvent.detail.event) {
+                  if (customEvent.detail?.event) {
                     const newValue = customEvent.detail.event.target.value;
                     field.handleChange(newValue);
                   }

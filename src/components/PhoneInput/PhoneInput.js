@@ -25,19 +25,41 @@ export class PhoneInput extends LitElement {
     const input = event.target;
     let raw = input.value;
 
-    let phoneNumber = raw.replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '');
+    raw = raw.replace(/[^\d+]/g, '');
 
-    if (phoneNumber.startsWith('+')) {
-      phoneNumber = '+' + phoneNumber.slice(1).replace(/\+/g, '');
+    if (raw.startsWith('+')) {
+      raw = '+' + raw.slice(1).replace(/\+/g, '');
     }
 
-    input.value = phoneNumber;
-    this.value = phoneNumber;
+    const digits = raw.replace(/[^\d]/g, '');
+
+    let formatted = '+';
+    if (digits.length > 0) {
+      const countryCode = digits.substring(0, 2);
+      formatted += `(${countryCode})`;
+    }
+
+    const rest = digits.substring(2);
+
+    if (rest.length > 0) {
+      const part1 = rest.substring(0, 3);
+      const part2 = rest.substring(3, 6);
+      const part3 = rest.substring(6, 8);
+      const part4 = rest.substring(8, 10);
+
+      formatted +=
+        (part1 ? ' ' + part1 : '') +
+        (part2 ? ' ' + part2 : '') +
+        (part3 ? ' ' + part3 : '') +
+        (part4 ? ' ' + part4 : '');
+    }
+
+    input.value = formatted.trim();
+    this.value = input.value;
+
     this.dispatchEvent(
       new CustomEvent('input', {
-        detail: {
-          event,
-        },
+        detail: { event },
         composed: true,
         bubbles: true,
       })

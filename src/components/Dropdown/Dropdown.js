@@ -17,6 +17,23 @@ export class Dropdown extends LitElement {
     this.options = [];
     this.value = '';
     this.open = false;
+    this._handleDocumentClick = this._handleDocumentClick.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener('click', this._handleDocumentClick);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('click', this._handleDocumentClick);
+  }
+
+  _handleDocumentClick(event) {
+    if (!this.contains(event.target)) {
+      this.open = false;
+    }
   }
 
   handleChange(e) {
@@ -30,7 +47,8 @@ export class Dropdown extends LitElement {
     );
   }
 
-  _toggleOpen() {
+  _toggleOpen(event) {
+    event.stopPropagation();
     this.open = !this.open;
   }
 

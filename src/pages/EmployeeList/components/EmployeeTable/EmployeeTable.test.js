@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { fireEvent } from '@testing-library/dom';
 import './EmployeeTable';
+import { Router } from '@vaadin/router';
 
 vi.mock('@/lib', async () => {
   const actual = await vi.importActual('@/lib');
@@ -9,8 +10,13 @@ vi.mock('@/lib', async () => {
     translate: vi.fn((key) => key),
     formatDateToDefault: vi.fn((date) => date),
     TABLE_ITEMS_PER_PAGE: 5,
+    Path: { EditEmployee: '/employees/:employeeId/edit' },
   };
 });
+
+vi.mock('@vaadin/router', () => ({
+  Router: { go: vi.fn() },
+}));
 
 describe('EmployeeTable', () => {
   let container;
@@ -56,7 +62,6 @@ describe('EmployeeTable', () => {
   });
 
   it('renders correct number of rows', async () => {
-    await table.updateComplete;
     const rows = table.shadowRoot.querySelectorAll('tbody tr');
     expect(rows.length).toBe(employees.length);
   });
@@ -76,9 +81,16 @@ describe('EmployeeTable', () => {
 
   it('renders correct employee data in first row', async () => {
     const firstRowCells = table.shadowRoot.querySelectorAll('tbody tr:first-child td');
-    expect(firstRowCells[0].textContent).toBe('John');
-    expect(firstRowCells[1].textContent).toBe('Doe');
-    expect(firstRowCells[2].textContent).toBe('2020-01-01');
-    expect(firstRowCells[3].textContent).toBe('1990-01-01');
+
+    expect(firstRowCells[1].textContent).toBe('John');
+    expect(firstRowCells[2].textContent).toBe('Doe');
+    expect(firstRowCells[3].textContent).toBe('2020-01-01');
+    expect(firstRowCells[4].textContent).toBe('1990-01-01');
+  });
+
+  it('clicking edit button calls Router.go with correct employee ID', async () => {
+    const editButton = table.shadowRoot.querySelector('.edit-button');
+    fireEvent.click(editButton);
+    expect(Router.go).toHaveBeenCalledWith('/employees/1/edit');
   });
 });

@@ -16,7 +16,8 @@ export const store = createStore(
             employees: [...state.employees, employee],
           }));
         },
-        updateEmployee: (employeeId, updatedData) => {
+        updateEmployee: (updatedData) => {
+          const employeeId = updatedData.id;
           store.setState((state) => ({
             employees: state.employees.map((employee) =>
               employee.id === employeeId ? { ...employee, ...updatedData } : employee

@@ -62,7 +62,7 @@ describe('Store', () => {
     addEmployee(mockEmployee);
 
     const updatedEmployee = { ...mockEmployee, firstName: 'Johnny' };
-    updateEmployee(mockEmployee.id, updatedEmployee);
+    updateEmployee(updatedEmployee);
 
     const state = store.getState();
     const updatedEmployeeInStore = state.employees.find((emp) => emp.id === mockEmployee.id);

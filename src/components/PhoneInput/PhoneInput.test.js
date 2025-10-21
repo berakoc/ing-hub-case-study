@@ -62,7 +62,7 @@ describe('PhoneInput Component', () => {
     expect(blurListener).toHaveBeenCalled();
   });
 
-  it('dispatches input event and updates value correctly', async () => {
+  it('formats input to valid phone format', async () => {
     const el = document.createElement('ing-phone-input');
     container.appendChild(el);
     await el.updateComplete;
@@ -71,24 +71,21 @@ describe('PhoneInput Component', () => {
     const inputListener = vi.fn();
     el.addEventListener('input', inputListener);
 
-    fireEvent.input(input, { target: { value: 'abc+123def456' } });
+    fireEvent.input(input, { target: { value: '+905321234567' } });
 
-    expect(input.value).toBe('+123456');
-    expect(el.value).toBe('+123456');
+    expect(input.value).toBe('+(90) 532 123 45 67');
+    expect(el.value).toBe('+(90) 532 123 45 67');
     expect(inputListener).toHaveBeenCalled();
   });
 
-  it('keeps + only at the start', async () => {
+  it('keeps only one + and formats properly even with messy input', async () => {
     const el = document.createElement('ing-phone-input');
     container.appendChild(el);
     await el.updateComplete;
 
     const input = el.shadowRoot.querySelector('input');
+    fireEvent.input(input, { target: { value: '++9+0+53212+34567' } });
 
-    fireEvent.input(input, { target: { value: '+12+34+56' } });
-    expect(input.value).toBe('+123456');
-
-    fireEvent.input(input, { target: { value: '++1+2+3' } });
-    expect(input.value).toBe('+123');
+    expect(input.value).toBe('+(90) 532 123 45 67');
   });
 });

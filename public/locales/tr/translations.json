@@ -9,16 +9,15 @@
     "title": "Çalışan Listesi",
     "deleteEmployeeModal": {
       "title": "Emin misiniz?",
-      "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı silinecektir",
-      "proceed": "Devam Et",
-      "cancel": "İptal"
+      "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı silinecektir"
     }
   },
   "buttonAction": {
     "edit": "Düzenle",
     "delete": "Sil",
     "save": "Kaydet",
-    "cancel": "İptal"
+    "cancel": "İptal",
+    "proceed": "Devam Et"
   },
   "notFound": {
     "pageDoesNotExist": "Hata! Aradığınız sayfa mevcut değil.",
@@ -61,5 +60,12 @@
     "sales_representative": "Satış Temsilcisi",
     "finance_analyst": "Finans Analisti",
     "customer_support": "Müşteri Temsilcisi"
+  },
+  "editEmployee": {
+    "title": "Çalışanı Düzenle",
+    "editEmployeeModal": {
+      "title": "Emin misiniz?",
+      "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı güncellenecektir"
+    }
   }
 }

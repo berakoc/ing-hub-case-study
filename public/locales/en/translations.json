@@ -9,16 +9,15 @@
     "title": "Employee List",
     "deleteEmployeeModal": {
       "title": "Are you sure?",
-      "subtitle": "Selected Employee record of {{employeeFullname}} times will be deleted",
-      "proceed": "Proceed",
-      "cancel": "Cancel"
+      "subtitle": "Selected Employee record of {{employeeFullname}} times will be deleted"
     }
   },
   "buttonAction": {
     "edit": "Edit",
     "delete": "Delete",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "proceed": "Proceed"
   },
   "notFound": {
     "pageDoesNotExist": "Oops! The page you're looking for doesn't exist.",
@@ -61,5 +60,12 @@
     "sales_representative": "Sales Representative",
     "finance_analyst": "Finance Analyst",
     "customer_support": "Customer Support"
+  },
+  "editEmployee": {
+    "title": "Edit Employee",
+    "editEmployeeModal": {
+      "title": "Are you sure?",
+      "subtitle": "Selected Employee record of {{employeeFullname}} will be updated"
+    }
   }
 }

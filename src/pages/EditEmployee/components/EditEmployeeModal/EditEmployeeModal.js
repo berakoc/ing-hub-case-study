@@ -3,7 +3,7 @@ import '@phosphor-icons/webcomponents/PhX';
 import { translate } from '@/lib';
 import { ButtonVariant } from '@/components';
 
-export class DeleteEmployeeModal extends LitElement {
+export class EditEmployeeModal extends LitElement {
   static get properties() {
     return {
       isOpen: { type: Boolean },
@@ -17,7 +17,7 @@ export class DeleteEmployeeModal extends LitElement {
   }
 
   _deleteEmployee() {
-    this.dispatchEvent(new CustomEvent('delete-employee', { bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('edit-employee', { bubbles: true, composed: true }));
   }
 
   _closeModal() {
@@ -29,13 +29,13 @@ export class DeleteEmployeeModal extends LitElement {
       <ing-modal ?isOpen=${this.isOpen}>
         <div class="container">
           <div class="header">
-            <h1 class="title">${translate('employeeList.deleteEmployeeModal.title')}</h1>
+            <h1 class="title">${translate('editEmployee.editEmployeeModal.title')}</h1>
             <button @click=${this._closeModal} class="close-button">
               <ph-x weight="bold"></ph-x>
             </button>
           </div>
           <span class="subtitle"
-            >${translate('employeeList.deleteEmployeeModal.subtitle', {
+            >${translate('editEmployee.editEmployeeModal.subtitle', {
               employeeFullname: this.employeeFullname,
             })}</span
           >
@@ -102,4 +102,4 @@ export class DeleteEmployeeModal extends LitElement {
   }
 }
 
-customElements.define('delete-employee-modal', DeleteEmployeeModal);
+customElements.define('edit-employee-modal', EditEmployeeModal);
