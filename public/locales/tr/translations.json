@@ -63,6 +63,7 @@
   },
   "editEmployee": {
     "title": "Çalışanı Düzenle",
+    "youAreEditing": "Düzenlediğiniz çalışan: {{employeeFullname}}",
     "editEmployeeModal": {
       "title": "Emin misiniz?",
       "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı güncellenecektir"

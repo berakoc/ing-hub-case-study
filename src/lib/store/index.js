@@ -13,7 +13,7 @@ export const store = createStore(
         ...initialState,
         addEmployee: (employee) => {
           store.setState((state) => ({
-            employees: [...state.employees, employee],
+            employees: [employee, ...state.employees],
           }));
         },
         updateEmployee: (updatedData) => {

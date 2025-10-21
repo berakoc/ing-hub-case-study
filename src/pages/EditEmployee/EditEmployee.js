@@ -88,6 +88,11 @@ export class EditEmployee extends LitElement {
     return html`<div class="container">
       <h2 class="title">${translate('editEmployee.title')}</h2>
       <form id="add-employee-form" class="form">
+        <span class="employee-edit-text"
+          >${translate('editEmployee.youAreEditing', {
+            employeeFullname,
+          })}</span
+        >
         <div class="form-inputs">
           ${this.#form.field(
             {
@@ -299,20 +304,15 @@ export class EditEmployee extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 64px;
+        position: relative;
       }
 
       .form-inputs {
         display: grid;
         gap: 1rem;
       }
-
-      .form-inputs input {
-        padding: 0.6rem;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 1rem;
-        box-sizing: border-box;
-        width: 100%;
+      .employee-edit-text {
+        font-weight: 500;
       }
 
       @media (max-width: 639px) {
@@ -325,7 +325,7 @@ export class EditEmployee extends LitElement {
         }
 
         .form {
-          padding: 16px;
+          padding: 16px 16px 16px;
           gap: 32px;
         }
 
@@ -350,7 +350,7 @@ export class EditEmployee extends LitElement {
         }
 
         .form {
-          padding: 32px;
+          padding: 32px 32px 32px;
         }
       }
 
@@ -367,8 +367,13 @@ export class EditEmployee extends LitElement {
           gap: 64px;
         }
 
+        .employee-edit-text {
+          position: relative;
+          left: -72px;
+        }
+
         .form {
-          padding: 64px 96px;
+          padding: 32px 96px 64px;
         }
       }
     `;

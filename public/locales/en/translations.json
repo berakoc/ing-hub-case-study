@@ -63,6 +63,7 @@
   },
   "editEmployee": {
     "title": "Edit Employee",
+    "youAreEditing": "You are editing {{employeeFullname}}",
     "editEmployeeModal": {
       "title": "Are you sure?",
       "subtitle": "Selected Employee record of {{employeeFullname}} will be updated"
