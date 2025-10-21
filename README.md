@@ -155,4 +155,4 @@ This repository serves as a technical case study for **ING Hub’s Frontend Deve
 
 ---
 
-**Author:** [Bera Koç](https://github.com/<your-username>)
+**Author:** [Bera Koç](https://github.com/berakoc)
