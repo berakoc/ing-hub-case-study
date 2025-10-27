@@ -7,9 +7,14 @@
   },
   "employeeList": {
     "title": "Employee List",
+    "noEmployeesFound": "No employees found.",
     "deleteEmployeeModal": {
       "title": "Are you sure?",
-      "subtitle": "Selected Employee record of {{employeeFullname}} times will be deleted"
+      "subtitle": "Selected Employee record of {{employeeFullname}} times will be deleted",
+      "deleteSelectedEmployees": {
+        "title": "Are you sure?",
+        "subtitle": "Selected {{count}} employees' records will be deleted"
+      }
     }
   },
   "buttonAction": {
@@ -17,7 +22,8 @@
     "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
-    "proceed": "Proceed"
+    "proceed": "Proceed",
+    "deleteSelected": "Delete Selected ({{count}})"
   },
   "notFound": {
     "pageDoesNotExist": "Oops! The page you're looking for doesn't exist.",
@@ -41,7 +47,13 @@
       "phone": "Please enter a valid phone number.",
       "email": "Please enter a valid email address.",
       "departmentMinError": "Department name must be at least 2 characters long.",
-      "positionNotSelectedError": "Please select a position."
+      "positionNotSelectedError": "Please select a position.",
+      "duplicatePhone": "This phone number is already in use.",
+      "duplicateEmail": "This email address is already in use.",
+      "futureBirthDate": "Date of birth cannot be in the future.",
+      "futureEmploymentDate": "Date of employment cannot be in the future.",
+      "employmentBeforeBirth": "Date of employment cannot be before date of birth.",
+      "mustBe18": "Employee must be at least 18 years old."
     }
   },
   "pleaseSelect": "Please Select",
@@ -68,5 +80,6 @@
       "title": "Are you sure?",
       "subtitle": "Selected Employee record of {{employeeFullname}} will be updated"
     }
-  }
+  },
+  "searchForEmployee": "Search for employee"
 }

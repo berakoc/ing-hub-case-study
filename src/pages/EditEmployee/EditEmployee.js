@@ -1,4 +1,12 @@
-import { getEmployeeFullname, Path, store, translate } from '@/lib';
+import {
+  getEmployeeFullname,
+  Path,
+  store,
+  translate,
+  isEmailUnique,
+  isPhoneNumberUnique,
+  parseDate,
+} from '@/lib';
 import { TanStackFormController } from '@tanstack/lit-form';
 import { LitElement, html, css, nothing } from 'lit';
 import z from 'zod';
@@ -6,18 +14,8 @@ import { employeePositions } from '@/lib/store/data';
 import { Router } from '@vaadin/router';
 import { when } from 'lit/directives/when.js';
 import './components';
+import dayjs from 'dayjs';
 
-const phonePattern = /^\+\(\d{1,3}\) \d{3} \d{3} \d{2} \d{2}$/;
-const employeeSchema = z.object({
-  firstName: z.string().min(2, { error: 'employee.errors.firstNameMinError' }),
-  lastName: z.string().min(2, { error: 'employee.errors.lastNameMinError' }),
-  dateOfEmployment: z.string().nonempty({ error: 'employee.errors.emptyDateOfEmployment' }),
-  dateOfBirth: z.string().nonempty({ error: 'employee.errors.dateOfBirth' }),
-  phone: z.string().regex(phonePattern, { error: 'employee.errors.phone' }),
-  email: z.email({ message: 'employee.errors.email' }),
-  department: z.string().min(2, { error: 'employee.errors.departmentMinError' }),
-  position: z.string().min(2, { error: 'employee.errors.positionNotSelectedError' }),
-});
 export class EditEmployee extends LitElement {
   #form;
 
@@ -48,13 +46,114 @@ export class EditEmployee extends LitElement {
       email: '',
     };
 
+    const phonePattern = /^\+\(\d{1,3}\) \d{3} \d{3} \d{2} \d{2}$/;
+
+    const employeeSchema = z
+      .object({
+        firstName: z.string().min(2, { error: 'employee.errors.firstNameMinError' }),
+        lastName: z.string().min(2, { error: 'employee.errors.lastNameMinError' }),
+        dateOfEmployment: z.preprocess(
+          (val) => {
+            if (val instanceof Date) return val.toISOString().split('T')[0];
+            return val;
+          },
+          z.string().nonempty({ error: 'employee.errors.emptyDateOfEmployment' })
+        ),
+        dateOfBirth: z.preprocess(
+          (val) => {
+            if (val instanceof Date) return val.toISOString().split('T')[0];
+            return val;
+          },
+          z.string().nonempty({ error: 'employee.errors.dateOfBirth' })
+        ),
+        phone: z
+          .string()
+          .regex(phonePattern, { error: 'employee.errors.phone' })
+          .superRefine((phone, ctx) => {
+            const employees = store.getState().employees;
+            const isDuplicate = !isPhoneNumberUnique(
+              phone,
+              employees.filter((emp) => emp.id !== employeeId)
+            );
+            if (isDuplicate) {
+              ctx.addIssue({
+                code: 'custom',
+                message: 'employee.errors.duplicatePhone',
+              });
+            }
+          }),
+        email: z.email({ message: 'employee.errors.email' }).superRefine((email, ctx) => {
+          const employees = store.getState().employees;
+          const isDuplicate = !isEmailUnique(
+            email,
+            employees.filter((employee) => employee.id !== employeeId)
+          );
+          if (isDuplicate) {
+            ctx.addIssue({
+              code: 'custom',
+              message: 'employee.errors.duplicateEmail',
+            });
+          }
+        }),
+        department: z.string().min(2, { error: 'employee.errors.departmentMinError' }),
+        position: z.string().min(2, { error: 'employee.errors.positionNotSelectedError' }),
+      })
+      .superRefine((data, ctx) => {
+        const today = new Date();
+        const birthDate = parseDate(data.dateOfBirth);
+        const employmentDate = parseDate(data.dateOfEmployment);
+
+        if (dayjs(birthDate).isAfter(dayjs())) {
+          ctx.addIssue({
+            path: ['dateOfBirth'],
+            code: 'custom',
+            message: 'employee.errors.futureBirthDate',
+          });
+        }
+
+        if (dayjs(employmentDate).isAfter(dayjs())) {
+          ctx.addIssue({
+            path: ['dateOfEmployment'],
+            code: 'custom',
+            message: 'employee.errors.futureEmploymentDate',
+          });
+        }
+
+        if (dayjs(employmentDate).isBefore(dayjs(birthDate))) {
+          ctx.addIssue({
+            path: ['dateOfEmployment'],
+            code: 'custom',
+            message: 'employee.errors.employmentBeforeBirth',
+          });
+        }
+
+        const ageDiff = today.getFullYear() - birthDate.getFullYear();
+        const hasBirthdayPassed =
+          today.getMonth() > birthDate.getMonth() ||
+          (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+        const age = hasBirthdayPassed ? ageDiff : ageDiff - 1;
+
+        if (age < 18) {
+          ctx.addIssue({
+            path: ['dateOfBirth'],
+            code: 'custom',
+            message: 'employee.errors.mustBe18',
+          });
+        }
+      });
+
     this.#form = new TanStackFormController(this, {
       defaultValues: {
         ...initialDefaultValues,
         ...this.employee,
       },
       onSubmit({ value: formValues }) {
-        store.getState().updateEmployee(formValues);
+        const updatedEmployee = {
+          ...formValues,
+          dateOfEmployment: parseDate(formValues.dateOfEmployment),
+          dateOfBirth: parseDate(formValues.dateOfBirth),
+        };
+        store.getState().updateEmployee(updatedEmployee);
         Router.go(Path.EmployeeList);
       },
       validators: {
@@ -139,7 +238,7 @@ export class EditEmployee extends LitElement {
               name: 'dateOfEmployment',
             },
             (field) => {
-              return html`<ing-date-input
+              return html`<ing-modern-date-input
                 id="dateOfEmployment"
                 label=${translate('employee.dateOfEmployment')}
                 .error=${!field.state.meta.isValid ? field.state.meta.errors[0].message : null}
@@ -151,7 +250,7 @@ export class EditEmployee extends LitElement {
                     field.handleChange(newValue);
                   }
                 }}
-              ></ing-date-input>`;
+              ></ing-modern-date-input>`;
             }
           )}
           ${this.#form.field(
@@ -159,7 +258,7 @@ export class EditEmployee extends LitElement {
               name: 'dateOfBirth',
             },
             (field) => {
-              return html`<ing-date-input
+              return html`<ing-modern-date-input
                 id="dateOfBirth"
                 label=${translate('employee.dateOfBirth')}
                 .error=${!field.state.meta.isValid ? field.state.meta.errors[0].message : null}
@@ -171,7 +270,7 @@ export class EditEmployee extends LitElement {
                     field.handleChange(newValue);
                   }
                 }}
-              ></ing-date-input>`;
+              ></ing-modern-date-input>`;
             }
           )}
           ${this.#form.field(

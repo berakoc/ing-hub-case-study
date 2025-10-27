@@ -1,0 +1,22 @@
+/* flatpickr-overrides.css */
+.flatpickr-calendar {
+  --flatpickr-primary-color: var(--color-ing-orange);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background-color: var(--color-ing-orange);
+  border-color: var(--color-ing-orange);
+  color: #fff;
+}
+
+.flatpickr-day.selected:hover {
+  background-color: var(--color-ing-orange-light);
+  border-color: var(--color-ing-orange-light);
+}
+
+.flatpickr-months .flatpickr-month,
+.flatpickr-weekdays {
+  color: var(--color-ing-orange);
+}

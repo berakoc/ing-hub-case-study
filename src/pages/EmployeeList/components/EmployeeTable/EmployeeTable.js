@@ -5,7 +5,8 @@ import {
   TABLE_ITEMS_PER_PAGE,
   translate,
 } from '@/lib';
-import { LitElement, html, css } from 'lit';
+import { when } from 'lit/directives/when.js';
+import { LitElement, html, css, nothing } from 'lit';
 import '@phosphor-icons/webcomponents/PhPencilSimpleLine';
 import '@phosphor-icons/webcomponents/PhTrashSimple';
 import { Router } from '@vaadin/router';
@@ -15,7 +16,55 @@ export class EmployeeTable extends LitElement {
     return {
       employees: { type: Array },
       currentPage: { type: Number },
+      selectedEmployeesIds: { type: Array },
+      areAllEmployeesSelected: { type: Boolean },
     };
+  }
+
+  constructor() {
+    super();
+    this.selectedEmployeesIds = [];
+    this.areAllEmployeesSelected = false;
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('currentPage')) {
+      this.areAllEmployeesSelected = false;
+      this.selectedEmployeesIds = [];
+    }
+
+    if (changedProperties.has('employees') || changedProperties.has('currentPage')) {
+      const totalPages = Math.ceil((this.employees?.length ?? 0) / TABLE_ITEMS_PER_PAGE) || 1;
+      if (this.currentPage > totalPages) {
+        this.dispatchEvent(
+          new CustomEvent('change-page', {
+            bubbles: true,
+            composed: true,
+            detail: { currentPage: Math.max(1, totalPages) },
+          })
+        );
+      }
+    }
+
+    const currentPageEmployeeIds = this.employees
+      .slice((this.currentPage - 1) * TABLE_ITEMS_PER_PAGE, this.currentPage * TABLE_ITEMS_PER_PAGE)
+      .map((e) => e.id);
+
+    this.areAllEmployeesSelected =
+      currentPageEmployeeIds.length > 0 &&
+      currentPageEmployeeIds.every((id) => this.selectedEmployeesIds.includes(id));
+  }
+
+  _openDeleteEmployeeModalForSelectedEmployees() {
+    this.dispatchEvent(
+      new CustomEvent('open-delete-employee-modal-for-selected-employees', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          selectedEmployeeIds: this.selectedEmployeesIds,
+        },
+      })
+    );
   }
 
   _openDeleteEmployeeModal(selectedEmployee) {
@@ -32,33 +81,106 @@ export class EmployeeTable extends LitElement {
     Router.go(Path.EditEmployee.replace(':employeeId', selectedEmployee.id));
   }
 
+  _handleCheckboxChange(event, employeeId) {
+    if (event.detail.checked) {
+      this.selectedEmployeesIds = [...this.selectedEmployeesIds, employeeId];
+    } else {
+      this.selectedEmployeesIds = this.selectedEmployeesIds.filter((id) => id !== employeeId);
+    }
+  }
+
+  _handleSelectAllCheckboxChange(event) {
+    this.areAllEmployeesSelected = event.detail.checked;
+    if (event.detail.checked) {
+      const currentPageEmployeeIds = this.employees
+        .slice(
+          (this.currentPage - 1) * TABLE_ITEMS_PER_PAGE,
+          this.currentPage * TABLE_ITEMS_PER_PAGE
+        )
+        .map((employee) => employee.id);
+      this.selectedEmployeesIds = Array.from(
+        new Set([...this.selectedEmployeesIds, ...currentPageEmployeeIds])
+      );
+    } else {
+      const currentPageEmployeeIds = this.employees
+        .slice(
+          (this.currentPage - 1) * TABLE_ITEMS_PER_PAGE,
+          this.currentPage * TABLE_ITEMS_PER_PAGE
+        )
+        .map((employee) => employee.id);
+      this.selectedEmployeesIds = this.selectedEmployeesIds.filter(
+        (id) => !currentPageEmployeeIds.includes(id)
+      );
+    }
+  }
+
   render() {
-    return html`<div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th><ing-checkbox></ing-checkbox></th>
-            <th>${translate('employee.firstName')}</th>
-            <th>${translate('employee.lastName')}</th>
-            <th>${translate('employee.dateOfEmployment')}</th>
-            <th>${translate('employee.dateOfBirth')}</th>
-            <th>${translate('employee.phone')}</th>
-            <th>${translate('employee.email')}</th>
-            <th>${translate('employee.department')}</th>
-            <th>${translate('employee.position')}</th>
-            <th>${translate('employee.actions')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${this.employees
-            .slice(
-              (this.currentPage - 1) * TABLE_ITEMS_PER_PAGE,
-              this.currentPage * TABLE_ITEMS_PER_PAGE
-            )
-            .map(
+    const currentTableData = this.employees.slice(
+      (this.currentPage - 1) * TABLE_ITEMS_PER_PAGE,
+      this.currentPage * TABLE_ITEMS_PER_PAGE
+    );
+    const isTableEmpty = currentTableData.length === 0;
+    if (isTableEmpty) {
+      if (this.currentPage > 1) {
+        this.dispatchEvent(
+          new CustomEvent('change-page', {
+            bubbles: true,
+            composed: true,
+            detail: { currentPage: this.currentPage - 1 },
+          })
+        );
+      } else {
+        return html`<div class="empty-table-container">
+          <p>${translate('employeeList.noEmployeesFound')}</p>
+        </div>`;
+      }
+    }
+
+    return html` ${when(
+        this.selectedEmployeesIds.length > 0,
+        () =>
+          html` <div class="table-actions">
+            <ing-button @click=${this._openDeleteEmployeeModalForSelectedEmployees}
+              >${translate('buttonAction.deleteSelected', {
+                count: this.selectedEmployeesIds.length,
+              })}</ing-button
+            >
+          </div>`,
+        () => nothing
+      )}
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <ing-checkbox
+                  .checked=${this.areAllEmployeesSelected}
+                  @checkbox-change=${this._handleSelectAllCheckboxChange}
+                ></ing-checkbox>
+              </th>
+              <th>${translate('employee.firstName')}</th>
+              <th>${translate('employee.lastName')}</th>
+              <th>${translate('employee.dateOfEmployment')}</th>
+              <th>${translate('employee.dateOfBirth')}</th>
+              <th>${translate('employee.phone')}</th>
+              <th>${translate('employee.email')}</th>
+              <th>${translate('employee.department')}</th>
+              <th>${translate('employee.position')}</th>
+              <th>${translate('employee.actions')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${currentTableData.map(
               (employee) =>
                 html`<tr>
-                  <td><ing-checkbox></ing-checkbox></td>
+                  <td>
+                    <ing-checkbox
+                      .checked=${this.selectedEmployeesIds.find(
+                        (selectedEmployeeId) => selectedEmployeeId === employee.id
+                      ) !== undefined}
+                      @checkbox-change=${(event) => this._handleCheckboxChange(event, employee.id)}
+                    ></ing-checkbox>
+                  </td>
                   <td>${employee.firstName}</td>
                   <td>${employee.lastName}</td>
                   <td>${formatDateToDefault(employee.dateOfEmployment)}</td>
@@ -82,9 +204,9 @@ export class EmployeeTable extends LitElement {
                   </td>
                 </tr>`
             )}
-        </tbody>
-      </table>
-    </div>`;
+          </tbody>
+        </table>
+      </div>`;
   }
 
   static get styles() {
@@ -93,6 +215,26 @@ export class EmployeeTable extends LitElement {
         white-space: nowrap;
         overflow-x: auto;
         background-color: var(--color-white);
+        position: relative;
+      }
+
+      .empty-table-container {
+        padding: 16px;
+        font-size: 14px;
+        color: var(--color-text-primary);
+        background-color: var(--color-white);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .table-actions {
+        display: flex;
+        justify-content: flex-end;
+        padding: 16px 0;
+        position: sticky;
+        right: 0;
       }
 
       table {

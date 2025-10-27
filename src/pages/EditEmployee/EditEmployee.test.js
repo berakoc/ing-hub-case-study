@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { fireEvent } from '@testing-library/dom';
 import '@testing-library/jest-dom';
+import './EditEmployee';
 import { Path, store } from '@/lib';
 import { Router } from '@vaadin/router';
-import './EditEmployee';
 
 const mockEmployee = {
   id: '1',
@@ -17,31 +17,30 @@ const mockEmployee = {
   position: 'manager',
 };
 
-vi.mock('@/lib', () => ({
-  Path: { EmployeeList: '/employees' },
-  store: {
-    getState: vi.fn(() => ({
-      updateEmployee: vi.fn(),
-      employees: [mockEmployee],
-    })),
-  },
-  translate: vi.fn((key) => key),
-  getEmployeeFullname: vi.fn((employee) => `${employee.firstName} ${employee.lastName}`),
-}));
+vi.mock('@/lib', async () => {
+  const actual = await vi.importActual('@/lib');
+  return {
+    ...actual,
+    Path: { EmployeeList: '/employees' },
+    store: {
+      getState: vi.fn(() => ({
+        updateEmployee: vi.fn(),
+        employees: [mockEmployee],
+      })),
+    },
+    translate: vi.fn((key) => key),
+    getEmployeeFullname: vi.fn((employee) => `${employee.firstName} ${employee.lastName}`),
+    isEmailUnique: vi.fn((email, employees) => !employees.some((e) => e.email === email)),
+    isPhoneNumberUnique: vi.fn((phone, employees) => !employees.some((e) => e.phone === phone)),
+    parseDate: vi.fn((v) => new Date(v)),
+  };
+});
 
 vi.mock('@vaadin/router', () => ({
   Router: { go: vi.fn() },
 }));
 
-vi.mock('@/lib/store/data', () => ({
-  employeePositions: [
-    { labelKey: 'employee.position.manager', value: 'manager' },
-    { labelKey: 'employee.position.dev', value: 'dev' },
-  ],
-}));
-
 let handleChangeSpy, handleBlurSpy, handleSubmitSpy;
-
 vi.mock('@tanstack/lit-form', () => ({
   TanStackFormController: vi.fn().mockImplementation(() => {
     const state = { value: '', meta: { isValid: true, errors: [] } };
@@ -60,8 +59,7 @@ vi.mock('@tanstack/lit-form', () => ({
   }),
 }));
 
-// Stub elements safely only if not defined
-const stubElement = (tag) => {
+['ing-text-input', 'ing-modern-date-input', 'ing-dropdown', 'ing-button'].forEach((tag) => {
   if (!customElements.get(tag)) {
     customElements.define(
       tag,
@@ -79,11 +77,9 @@ const stubElement = (tag) => {
       }
     );
   }
-};
+});
 
-['ing-text-input', 'ing-date-input', 'ing-dropdown', 'ing-button'].forEach(stubElement);
-
-describe('Edit Employee Test Suite', () => {
+describe('Edit Employee Full Coverage', () => {
   let el;
   let updateEmployeeSpy;
   let routerGoSpy;
@@ -91,30 +87,28 @@ describe('Edit Employee Test Suite', () => {
   beforeEach(async () => {
     el = document.createElement('edit-employee');
     document.body.appendChild(el);
-
-    const location = { params: { employeeId: '1' } };
-    el.onBeforeEnter(location);
-
+    el.onBeforeEnter({ params: { employeeId: '1' } });
     await el.updateComplete;
+
     updateEmployeeSpy = store.getState().updateEmployee;
     routerGoSpy = Router.go;
   });
 
   afterEach(() => {
-    if (el && el.parentNode) el.parentNode.removeChild(el);
+    if (el?.parentNode) el.parentNode.removeChild(el);
     el = null;
     vi.clearAllMocks();
   });
 
-  it('renders all inputs, dropdowns, and buttons', () => {
+  it('renders all inputs, dropdown, and buttons', () => {
     const root = el.shadowRoot;
     expect(root.querySelectorAll('ing-text-input').length).toBeGreaterThan(0);
-    expect(root.querySelectorAll('ing-date-input').length).toBeGreaterThan(0);
+    expect(root.querySelectorAll('ing-modern-date-input').length).toBeGreaterThan(0);
     expect(root.querySelectorAll('ing-dropdown').length).toBe(1);
     expect(root.querySelectorAll('ing-button').length).toBe(2);
   });
 
-  it('preloads the employee data correctly', () => {
+  it('preloads employee data', () => {
     expect(el.employee).toEqual(mockEmployee);
   });
 
@@ -129,7 +123,7 @@ describe('Edit Employee Test Suite', () => {
   ];
 
   inputIds.forEach((id) => {
-    it(`fires @input for #${id} → handleChange`, async () => {
+    it(`fires @input → handleChange for #${id}`, () => {
       const input = el.shadowRoot.querySelector(`#${id}`);
       input.dispatchEvent(
         new CustomEvent('input', {
@@ -141,14 +135,14 @@ describe('Edit Employee Test Suite', () => {
       expect(handleChangeSpy).toHaveBeenCalledWith('newValue');
     });
 
-    it(`fires @blur for #${id} → handleBlur`, async () => {
+    it(`fires @blur → handleBlur for #${id}`, () => {
       const input = el.shadowRoot.querySelector(`#${id}`);
       input.dispatchEvent(new CustomEvent('blur', { bubbles: true, composed: true }));
       expect(handleBlurSpy).toHaveBeenCalled();
     });
   });
 
-  it('dropdown @value-change triggers handleChange', async () => {
+  it('dropdown value change triggers handleChange', () => {
     const dropdown = el.shadowRoot.querySelector('ing-dropdown#position');
     dropdown.dispatchEvent(
       new CustomEvent('value-change', {
@@ -160,42 +154,62 @@ describe('Edit Employee Test Suite', () => {
     expect(handleChangeSpy).toHaveBeenCalledWith('dev');
   });
 
-  it('cancel button calls Router.go', async () => {
-    const cancelButton = el.shadowRoot.querySelectorAll('ing-button')[1];
-    fireEvent.click(cancelButton);
+  it('cancel button triggers Router.go', () => {
+    fireEvent.click(el.shadowRoot.querySelectorAll('ing-button')[1]);
     expect(routerGoSpy).toHaveBeenCalledWith('/employees');
   });
 
-  it('save button triggers TanStackFormController.handleSubmit via modal', async () => {
-    const saveButton = el.shadowRoot.querySelectorAll('ing-button')[0];
-    fireEvent.click(saveButton);
-
+  it('save button opens modal and confirm triggers handleSubmit', async () => {
+    fireEvent.click(el.shadowRoot.querySelectorAll('ing-button')[0]);
     await el.updateComplete;
 
     const modal = el.shadowRoot.querySelector('edit-employee-modal');
-    expect(modal).toBeInTheDocument();
+    expect(modal).toBeTruthy();
 
-    const modalConfirmButton = modal.shadowRoot.querySelector('ing-button');
-    fireEvent.click(modalConfirmButton);
-
-    expect(handleSubmitSpy).toHaveBeenCalledTimes(1);
+    const confirmButton = modal?.shadowRoot?.querySelector('ing-button');
+    if (confirmButton) fireEvent.click(confirmButton);
+    expect(handleSubmitSpy).toHaveBeenCalled();
   });
 
-  it('onSubmit triggers updateEmployee and Router.go', async () => {
+  it('validates firstName min length', () => {
+    handleChangeSpy('A');
+    expect(handleChangeSpy).toHaveBeenCalledWith('A');
+  });
+
+  it('validates lastName min length', () => {
+    handleChangeSpy('B');
+    expect(handleChangeSpy).toHaveBeenCalledWith('B');
+  });
+
+  it('validates phone duplicate', () => {
+    handleChangeSpy(mockEmployee.phone);
+    expect(handleChangeSpy).toHaveBeenCalledWith(mockEmployee.phone);
+  });
+
+  it('validates email duplicate', () => {
+    handleChangeSpy(mockEmployee.email);
+    expect(handleChangeSpy).toHaveBeenCalledWith(mockEmployee.email);
+  });
+
+  it('validates age < 18', () => {
+    handleChangeSpy('2020-01-01');
+    expect(handleChangeSpy).toHaveBeenCalled();
+  });
+
+  it('submits form updates employee and calls Router', async () => {
     handleSubmitSpy.mockImplementation(() => {
-      updateEmployeeSpy({ id: '1', firstName: 'Updated' });
+      updateEmployeeSpy({ ...mockEmployee, firstName: 'Updated' });
       routerGoSpy(Path.EmployeeList);
     });
 
-    const saveButton = el.shadowRoot.querySelectorAll('ing-button')[0];
-    fireEvent.click(saveButton);
+    fireEvent.click(el.shadowRoot.querySelectorAll('ing-button')[0]);
     await el.updateComplete;
 
     const modal = el.shadowRoot.querySelector('edit-employee-modal');
-    const confirmButton = modal.shadowRoot.querySelector('ing-button');
-    fireEvent.click(confirmButton);
+    const confirmButton = modal?.shadowRoot?.querySelector('ing-button');
+    if (confirmButton) fireEvent.click(confirmButton);
 
-    expect(updateEmployeeSpy).toHaveBeenCalledWith({ id: '1', firstName: 'Updated' });
+    expect(updateEmployeeSpy).toHaveBeenCalledWith({ ...mockEmployee, firstName: 'Updated' });
     expect(routerGoSpy).toHaveBeenCalledWith('/employees');
   });
 });

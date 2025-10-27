@@ -108,6 +108,10 @@ export class MainLayout extends LitElement {
           display: none;
         }
 
+        .main-content {
+          padding: 24px 20px;
+        }
+
         .mobile-header-actions {
           display: flex;
           align-items: center;

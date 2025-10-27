@@ -7,9 +7,14 @@
   },
   "employeeList": {
     "title": "Çalışan Listesi",
+    "noEmployeesFound": "Hiç çalışan bulunamadı.",
     "deleteEmployeeModal": {
       "title": "Emin misiniz?",
-      "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı silinecektir"
+      "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı silinecektir",
+      "deleteSelectedEmployees": {
+        "title": "Emin misiniz?",
+        "subtitle": "Seçili {{count}} çalışanın kayıtları silinecektir"
+      }
     }
   },
   "buttonAction": {
@@ -17,7 +22,8 @@
     "delete": "Sil",
     "save": "Kaydet",
     "cancel": "İptal",
-    "proceed": "Devam Et"
+    "proceed": "Devam Et",
+    "deleteSelected": "Seçilenleri Sil ({{count}})"
   },
   "notFound": {
     "pageDoesNotExist": "Hata! Aradığınız sayfa mevcut değil.",
@@ -41,7 +47,13 @@
       "phone": "Lütfen geçerli bir telefon numarası girin.",
       "email": "Lütfen geçerli bir e-posta adresi girin.",
       "departmentMinError": "Departman adı en az 2 karakter olmalıdır.",
-      "positionNotSelectedError": "Lütfen bir pozisyon seçin."
+      "positionNotSelectedError": "Lütfen bir pozisyon seçin.",
+      "duplicatePhone": "Bu telefon numarası zaten kullanılıyor.",
+      "duplicateEmail": "Bu e-posta adresi zaten kullanılıyor.",
+      "futureBirthDate": "Doğum tarihi gelecekte olamaz.",
+      "futureEmploymentDate": "İşe başlama tarihi gelecekte olamaz.",
+      "employmentBeforeBirth": "İşe başlama tarihi, doğum tarihinden önce olamaz.",
+      "mustBe18": "Çalışan en az 18 yaşında olmalıdır"
     }
   },
   "pleaseSelect": "Lütfen Seçiniz",
@@ -68,5 +80,6 @@
       "title": "Emin misiniz?",
       "subtitle": "Seçili {{employeeFullname}} çalışanın kaydı güncellenecektir"
     }
-  }
+  },
+  "searchForEmployee": "Çalışan ara"
 }

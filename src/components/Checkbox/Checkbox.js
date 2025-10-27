@@ -15,6 +15,17 @@ export class Checkbox extends LitElement {
 
   _handleCheckboxClick() {
     this.checked = !this.checked;
+    this._handleChange();
+  }
+
+  _handleChange() {
+    this.dispatchEvent(
+      new CustomEvent('checkbox-change', {
+        detail: { checked: this.checked },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   render() {

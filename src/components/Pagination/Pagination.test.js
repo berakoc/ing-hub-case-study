@@ -54,7 +54,7 @@ describe('Pagination component', () => {
   });
 
   it('page buttons set currentPage correctly', async () => {
-    await pagination.updateComplete; // ensure initial render
+    await pagination.updateComplete;
 
     const pageButtons = Array.from(pagination.shadowRoot.querySelectorAll('.page-button'));
     const spy = vi.fn();

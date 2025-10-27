@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import '@phosphor-icons/webcomponents/PhX';
 import { translate } from '@/lib';
 import { ButtonVariant } from '@/components';
+import { when } from 'lit/directives/when.js';
 
 export class DeleteEmployeeModal extends LitElement {
   static get properties() {
@@ -14,6 +15,7 @@ export class DeleteEmployeeModal extends LitElement {
   constructor() {
     super();
     this.isOpen = false;
+    this.selectedEmployeeIds = [];
   }
 
   _deleteEmployee() {
@@ -24,29 +26,66 @@ export class DeleteEmployeeModal extends LitElement {
     this.dispatchEvent(new CustomEvent('close-modal', { bubbles: true, composed: true }));
   }
 
+  _deleteSelectedEmployees() {
+    this.dispatchEvent(
+      new CustomEvent('delete-selected-employees', { bubbles: true, composed: true })
+    );
+  }
+
   render() {
     return html`
       <ing-modal ?isOpen=${this.isOpen}>
         <div class="container">
-          <div class="header">
-            <h1 class="title">${translate('employeeList.deleteEmployeeModal.title')}</h1>
-            <button @click=${this._closeModal} class="close-button">
-              <ph-x weight="bold"></ph-x>
-            </button>
-          </div>
-          <span class="subtitle"
-            >${translate('employeeList.deleteEmployeeModal.subtitle', {
-              employeeFullname: this.employeeFullname,
-            })}</span
-          >
-          <div class="action-buttons">
-            <ing-button @click=${this._deleteEmployee} .variant=${ButtonVariant.Primary}
-              >${translate('buttonAction.proceed')}</ing-button
-            >
-            <ing-button @click=${this._closeModal} .variant=${ButtonVariant.Tertiary}
-              >${translate('buttonAction.cancel')}</ing-button
-            >
-          </div>
+          ${when(
+            this.selectedEmployeeIds.length > 0,
+            () =>
+              html`<div class="header">
+                  <h1 class="title">
+                    ${translate('employeeList.deleteEmployeeModal.deleteSelectedEmployees.title')}
+                  </h1>
+                  <button @click=${this._closeModal} class="close-button">
+                    <ph-x weight="bold"></ph-x>
+                  </button>
+                </div>
+                <span class="subtitle"
+                  >${translate(
+                    'employeeList.deleteEmployeeModal.deleteSelectedEmployees.subtitle',
+                    {
+                      count: this.selectedEmployeeIds.length,
+                    }
+                  )}</span
+                >
+                <div class="action-buttons">
+                  <ing-button
+                    @click=${this._deleteSelectedEmployees}
+                    .variant=${ButtonVariant.Primary}
+                    >${translate('buttonAction.proceed')}</ing-button
+                  >
+                  <ing-button @click=${this._closeModal} .variant=${ButtonVariant.Tertiary}
+                    >${translate('buttonAction.cancel')}</ing-button
+                  >
+                </div>`,
+            () =>
+              html`<div class="header">
+                  <h1 class="title">${translate('employeeList.deleteEmployeeModal.title')}</h1>
+                  <button @click=${this._closeModal} class="close-button">
+                    <ph-x weight="bold"></ph-x>
+                  </button>
+                </div>
+                <span class="subtitle"
+                  >${translate('employeeList.deleteEmployeeModal.subtitle', {
+                    employeeFullname: this.employeeFullname,
+                  })}</span
+                >
+                <div class="action-buttons">
+                  <ing-button @click=${this._deleteEmployee} .variant=${ButtonVariant.Primary}
+                    >${translate('buttonAction.proceed')}</ing-button
+                  >
+                  <ing-button @click=${this._closeModal} .variant=${ButtonVariant.Tertiary}
+                    >${translate('buttonAction.cancel')}</ing-button
+                  >
+                </div>`
+          )}
         </div>
       </ing-modal>
     `;

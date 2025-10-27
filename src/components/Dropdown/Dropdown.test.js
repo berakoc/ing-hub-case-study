@@ -24,6 +24,7 @@ describe('Dropdown Component', () => {
     const el = document.createElement('ing-dropdown');
     el.label = 'Position';
     el.error = 'position.required';
+    el.options = [{ value: 'manager', label: 'Manager' }];
     container.appendChild(el);
     await el.updateComplete;
 
@@ -31,9 +32,14 @@ describe('Dropdown Component', () => {
     const selected = el.shadowRoot.querySelector('.selected');
     const errorMsg = el.shadowRoot.querySelector('.error-message');
 
+    expect(label).toBeInstanceOf(HTMLElement);
     expect(label).toBeInTheDocument();
     expect(label.textContent).toBe('Position');
+
+    expect(selected).toBeInstanceOf(HTMLElement);
     expect(selected).toBeInTheDocument();
+
+    expect(errorMsg).toBeInstanceOf(HTMLElement);
     expect(errorMsg).toBeInTheDocument();
     expect(errorMsg.textContent).toBe('position.required');
   });
@@ -48,16 +54,23 @@ describe('Dropdown Component', () => {
     await el.updateComplete;
 
     const selected = el.shadowRoot.querySelector('.selected');
-    expect(el.open).toBe(false);
+    expect(selected).toBeInstanceOf(HTMLElement);
 
-    // Open
-    await fireEvent.click(selected);
-    expect(el.open).toBe(true);
+    expect(el.open).toBe(false);
     let menu = el.shadowRoot.querySelector('.menu');
+    expect(menu).toBeNull();
+
+    await fireEvent.click(selected);
+    await el.updateComplete;
+
+    expect(el.open).toBe(true);
+    menu = el.shadowRoot.querySelector('.menu');
+    expect(menu).toBeInstanceOf(HTMLElement);
     expect(menu).toBeInTheDocument();
 
-    // Close
     await fireEvent.click(selected);
+    await el.updateComplete;
+
     expect(el.open).toBe(false);
     menu = el.shadowRoot.querySelector('.menu');
     expect(menu).toBeNull();
@@ -73,16 +86,18 @@ describe('Dropdown Component', () => {
     await el.updateComplete;
 
     const selected = el.shadowRoot.querySelector('.selected');
-    await fireEvent.click(selected); // open menu
-
-    const option = el.shadowRoot.querySelector('.option');
     const changeListener = vi.fn();
     const valueChangeListener = vi.fn();
 
     el.addEventListener('change', changeListener);
     el.addEventListener('value-change', valueChangeListener);
 
-    await fireEvent.click(option);
+    await fireEvent.click(selected);
+    await el.updateComplete;
+
+    const firstOption = el.shadowRoot.querySelector('.option');
+    await fireEvent.click(firstOption);
+    await el.updateComplete;
 
     expect(el.value).toBe('exec');
     expect(el.open).toBe(false);
@@ -109,6 +124,7 @@ describe('Dropdown Component', () => {
   it('adds error class when error is set', async () => {
     const el = document.createElement('ing-dropdown');
     el.error = 'someError';
+    el.options = [{ value: 'exec', label: 'Executive' }];
     container.appendChild(el);
     await el.updateComplete;
 

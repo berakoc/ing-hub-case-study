@@ -42,13 +42,30 @@ export class CardList extends LitElement {
   }
 
   render() {
+    const currentTableData = this.employees.slice(
+      (this.currentPage - 1) * CARD_LIST_ITEMS_PER_PAGE,
+      this.currentPage * CARD_LIST_ITEMS_PER_PAGE
+    );
+    const isTableEmpty = currentTableData.length === 0;
+    if (isTableEmpty) {
+      if (this.currentPage > 1) {
+        this.dispatchEvent(
+          new CustomEvent('change-page', {
+            bubbles: true,
+            composed: true,
+            detail: { currentPage: this.currentPage - 1 },
+          })
+        );
+      } else {
+        return html`<div class="empty-card-container">
+          <p>${translate('employeeList.noEmployeesFound')}</p>
+        </div>`;
+      }
+    }
     return html`
       <div class="container">
         ${repeat(
-          this.employees.slice(
-            (this.currentPage - 1) * CARD_LIST_ITEMS_PER_PAGE,
-            this.currentPage * CARD_LIST_ITEMS_PER_PAGE
-          ),
+          currentTableData,
           (employee) => employee.id,
           (employee) =>
             html`<div class="card">
@@ -66,7 +83,7 @@ export class CardList extends LitElement {
                   formatDateToDefault(employee.dateOfBirth)
                 )}
               </div>
-              <div class="card-row">
+              <div class="card-row email-phone-row">
                 ${this.renderEmployeeInfoItem(translate('employee.phone'), employee.phone)}
                 ${this.renderEmployeeInfoItem(translate('employee.email'), employee.email)}
               </div>
@@ -110,6 +127,17 @@ export class CardList extends LitElement {
         grid-template-columns: repeat(2, max-content);
         justify-content: space-between;
         margin: 0 64px 48px;
+      }
+
+      .empty-card-container {
+        padding: 16px;
+        font-size: 14px;
+        color: var(--color-text-primary);
+        background-color: var(--color-white);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
       }
 
       .card {
@@ -157,11 +185,18 @@ export class CardList extends LitElement {
       @media (max-width: 1200px) {
         .container {
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
           overflow-x: scroll;
           margin: 0;
           gap: 12px;
           padding: 8px 8px 12px;
+        }
+
+        .email-phone-row .info:nth-of-type(2) .info-value {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: block;
         }
 
         .card {

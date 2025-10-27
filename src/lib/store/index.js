@@ -29,6 +29,11 @@ export const store = createStore(
             employees: state.employees.filter((employee) => employee.id !== employeeId),
           }));
         },
+        deleteSelectedEmployees: (employeeIds) => {
+          store.setState((state) => ({
+            employees: state.employees.filter((employee) => !employeeIds.includes(employee.id)),
+          }));
+        },
         /**
          * @param {typeof initialState} givenInitialState
          */
